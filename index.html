@@ -1,0 +1,59 @@
+<!--<!DOCTYPE html>-->
+<html>
+<head>
+    <title>NASA 7km GEOS-5 Nature Run ViSUS Web Interface Demo</title>
+    <link rel="shortcut icon" type="image/png" href="/images/visus_logo_link_small.png">
+
+<!--    <script src="openseadragon/openseadragon.min.js"></script>-->
+    <script src="openseadragon/openseadragon.js"></script>
+    <script type="text/javascript">
+
+      var atlantis = "http://atlantis.sci.utah.edu/mod_visus?";
+      var atlanta = "http://atlanta.sci.utah.edu/mod_visus?";
+      var feedback = "http://feedback.llnl.gov/mod_visus?";
+      var localhost = "http://localhost:10000/mod_visus?";
+      var mercury = "http://mercury.sci.utah.edu:10000/mod_visus?";
+      //mercury=localhost;
+      var datasets_server = [mercury,mercury,mercury,mercury,mercury];
+	    var datasets_name = ["nature_hourly_2d-met1_noscripting&palette=LinearGray5&palette_min=0&palette_max=100","nature_hourly_2d-aer1_noscripting&palette=SmoothRich","BlueMarble","MIROC4h_feedback_proxy&palette=LinearGray4","nature_hourly_2d_scripting&palette=ExtendedCoolWarm&field=f0%3Dinput.aer1.DUCMASS25%3B%0D%0Af0_min%3D0.0000839%3B%0D%0Af0_max%3D0.000585%3B%0D%0Af1%3Dinput.aer1.DUSCAT25%3B%0D%0Af1_min%3D0.00000006%3B%0D%0Af1_max%3D0.709%3B%0D%0Af0%3D%28f0-f0_min%29%2A1.0%2F%28f0_max-f0_min%29%3B%0D%0Af1%3D%28f1-f1_min%29%2A1.0%2F%28f1_max-f1_min%29%3B%0D%0Aoutput%3DVisus.Array.sub%28%5Bf0%2Cf1%5D%29%3B&time=0&palette_min=-0.1674&palette_max=-0.15"];
+	    var datasets_width = [5759,5759,86399,639,5759];
+	    var datasets_height = [2880,2880,43199,319,2880];
+	    var datasets_levels = [25, 25, 33, 19, 25];
+    </script>
+  
+
+</head>
+
+<body>
+
+<div class="title"></div>
+<div align="center"><h1></h1>
+  <h1><strong>ViSUS Web Interface Demo</strong></h1>
+</div>
+<br>
+<br>
+<h2 align="left"><b>NASA GEOS-5 Nature Run</b></h2>
+<div id="openseadragon2"  style="height:100%;width:100%;background: black;"
+     class="openseadragon"></div>
+
+<p>&nbsp;</p>
+<p>
+  <script src="./display.js"></script>
+  <script type="text/javascript">
+    multi_data(datasets_width, datasets_height, datasets_levels, datasets_name, datasets_server);
+  </script>
+</p>
+<table width="100%" >
+  <tr>
+    <td><span style="float:
+		     right"><a href="http://www.visus.net"><img src="/images/visus_logo.png"
+								width="300"/></a></span></td>
+  </tr>
+</table>
+<div id="page-footer"><div class="container"><p class="text-center">&copy; 2016
+      Powered by OpenSeadragon and ViSUS</p></div></div>
+</body>
+</html>
+
+
+
