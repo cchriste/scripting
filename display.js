@@ -24,7 +24,7 @@ var add_dataset=function(ds_server,ds_name,ds_width,ds_height,ds_levels,tile_siz
 var multi_data = function(widths, heights, levels, datasets, servers){
     var tile_size=512;
       OpenSeadragon({
-        id: "openseadragon2",
+        id: "viewer",
         prefixUrl: "openseadragon/images/",
         showNavigator: true,
         showReferenceStrip: true,
