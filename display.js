@@ -16,7 +16,7 @@ var add_dataset=function(ds_server,ds_name,ds_width,ds_height,ds_levels,tile_siz
             var bbox3 = ds_height - level_tile_size*y
             var bbox2 = ds_height - Math.min(level_tile_size*(y+1)-1, ds_height)
                                       
-            return (ds_server + "action=boxquery&box=" + bbox0 + "%20" + bbox1+ "%20" + bbox2 + "%20" + bbox3 + "&compression=png&dataset=" + ds_name + "&maxh=" + ds_levels + "&toh=" + level*2)
+            return (ds_server + "action=boxquery&box=" + bbox0 + "%20" + bbox1+ "%20" + bbox2 + "%20" + bbox3 + "&compression=png&dataset=" + ds_name + "&maxh=" + ds_levels + "&toh=" + level*2 + "&palette=LinearGray4")
           }
        };
 }
@@ -30,7 +30,31 @@ var multi_data = function(widths, heights, levels, datasets, servers){
         showReferenceStrip: true,
         navigatorPosition:   "TOP_RIGHT",
         sequenceMode: true,
-        preserveViewport: true,
-        tileSources:   [add_dataset(servers[0],datasets[0],widths[0],heights[0],levels[0],tile_size),add_dataset(servers[1],datasets[1],widths[1],heights[1],levels[1],tile_size),add_dataset(servers[2],datasets[2],widths[2],heights[2],levels[2],tile_size),add_dataset(servers[3],datasets[3],widths[3],heights[3],levels[3],tile_size),add_dataset(servers[4],datasets[4],widths[4],heights[4],levels[4],tile_size)]
+        preserveViewport: false,
+        defaultZoomLevel: 0, //fit best
+        //minZoomLevel: 0,
+        //maxZoomLevel: 50,
+        minZoomImageRatio: 0.25,
+        maxZoomImageRatio: 4.0,
+        tileSources:   [add_dataset(servers[2],datasets[2],widths[2],heights[2],levels[2],tile_size)]
+//        tileSources:   [add_dataset(servers[0],datasets[0],widths[0],heights[0],levels[0],tile_size),add_dataset(servers[1],datasets[1],widths[1],heights[1],levels[1],tile_size),add_dataset(servers[2],datasets[2],widths[2],heights[2],levels[2],tile_size),add_dataset(servers[3],datasets[3],widths[3],heights[3],levels[3],tile_size),add_dataset(servers[4],datasets[4],widths[4],heights[4],levels[4],tile_size)]
       }); 
+}
+
+function openDataset(server, dataset, width, height, levels){
+  var tile_size=512;
+  OpenSeadragon({
+    id: "viewer",
+    prefixUrl: "openseadragon/images/",
+    showNavigator: true,
+    showReferenceStrip: false,
+    navigatorPosition:   "TOP_RIGHT",
+    immediateRender: true,
+    defaultZoomLevel: 0, //fit best
+    maxImageCacheCount: 500, //default is 200 "per drawer"
+    sequenceMode: false,
+    minZoomImageRatio: 0.25,
+    maxZoomImageRatio: 4.0,
+    tileSources:   [add_dataset("http://"+server+"/mod_visus?",dataset,width,height,levels,tile_size)]
+  }); 
 }

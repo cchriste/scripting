@@ -11,11 +11,11 @@
 
       var atlantis = "http://atlantis.sci.utah.edu/mod_visus?";
       var atlanta = "http://atlanta.sci.utah.edu:8080/mod_visus?";
-      var feedback = "http://feedback.llnl.gov/mod_visus?";
-      var localhost = "http://localhost:10000/mod_visus?";
+      var feedback = "https://feedback.llnl.gov/mod_visus?";
+      var localhost = "http://localhost:8081/mod_visus?";
       var mercury_app = "http://mercury.sci.utah.edu:10000/mod_visus?";
       var mercury = "http://mercury.sci.utah.edu/mod_visus?";
-      mercury=atlanta;
+      mercury=localhost;
       var datasets_server = [mercury,mercury,mercury,mercury,mercury];
 	    var datasets_name = ["nature_hourly_2d-met1_noscripting&palette=LinearGray5&palette_min=0&palette_max=100","nature_hourly_2d-aer1_noscripting&palette=SmoothRich","BlueMarble","MIROC4h_feedback_proxy&palette=LinearGray4","nature_hourly_2d_scripting&palette=ExtendedCoolWarm&field=f0%3Dinput.aer1.DUCMASS25%3B%0D%0Af0_min%3D0.0000839%3B%0D%0Af0_max%3D0.000585%3B%0D%0Af1%3Dinput.aer1.DUSCAT25%3B%0D%0Af1_min%3D0.00000006%3B%0D%0Af1_max%3D0.709%3B%0D%0Af0%3D%28f0-f0_min%29%2A1.0%2F%28f0_max-f0_min%29%3B%0D%0Af1%3D%28f1-f1_min%29%2A1.0%2F%28f1_max-f1_min%29%3B%0D%0Aoutput%3DVisus.Array.sub%28%5Bf0%2Cf1%5D%29%3B&time=0&palette_min=-0.1674&palette_max=-0.16"];
 	    var datasets_width = [5759,5759,86399,639,5759];
@@ -43,13 +43,13 @@
     <table width="100%">
       <tr>
         <td><div class="dropdown">
-            <button onclick="myFunction()" class="dropbtn">Server</button>
-            <div id="myDropdown" class="dropdown-content">
-              <span onclick="selectServer('feedback.llnl.gov')">feedback.llnl.gov</span>
-              <span onclick="selectServer('atlanta.sci.utah.edu')">atlanta.sci.utah.edu</span>
-              <span onclick="selectServer('localhost')">localhost</span>
-              <span onclick="selectServer('localhost:8080')">localhost:8080</span>
-              <span onclick="selectServer('localhost:8081')">localhost:8081</span>
+            <button onclick="serverDropdownOnClick()" class="dropbtn">Server</button>
+            <div id="serverDropdown" class="dropdown-content">
+              <span onclick="selectServer('https://feedback.llnl.gov')">feedback.llnl.gov</span>
+              <span onclick="selectServer('http://atlanta.sci.utah.edu')">atlanta.sci.utah.edu</span>
+              <span onclick="selectServer('http://localhost')">localhost</span>
+              <span onclick="selectServer('http://localhost:8080')">localhost:8080</span>
+              <span onclick="selectServer('http://localhost:8081')">localhost:8081</span>
             </div>
         </div></td>
         <td><div id="selected_server" class="selected-item">None</div></td>
@@ -58,8 +58,8 @@
         <td>
           <div class="dropdown">
             <button onclick="datasetDropdownOnclick()" class="dropbtn">Dataset</button>
-            <div id="datasetDropdown" class="dropdown-content">
-              <input type="text" placeholder="Search.." id="myInput" onkeyup="filterFunction()">
+            <div id="datasetsDropdown" class="dropdown-content">
+              <input type="text" placeholder="Search.." id="datasetsFilterInput" onkeyup="filterFunction()">
             </div>
           </div>
         </td>
