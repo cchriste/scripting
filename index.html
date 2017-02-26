@@ -59,11 +59,47 @@
           <div class="dropdown">
             <button onclick="datasetDropdownOnclick()" class="dropbtn">Dataset</button>
             <div id="datasetsDropdown" class="dropdown-content">
-              <input type="text" placeholder="Search.." id="datasetsFilterInput" onkeyup="filterFunction()">
+              <input type="text" placeholder="Search.." id="datasetsFilterInput" class="filterInput" onkeyup="filterFunction(this)">
             </div>
           </div>
         </td>
         <td><div id="selected_dataset" class="selected-item">None</div></td>
+      </tr>
+      <tr>
+        <td>
+          <div class="dropdown">
+            <button onclick="paletteDropdownOnclick()" class="dropbtn">Palette</button>
+            <div id="paletteDropdown" class="dropdown-content">
+              <input type="text" placeholder="Search.." id="paletteFilterInput" class="filterInput" onkeyup="filterFunction(this)">
+              <span onclick="selectPalette('grayopaque')">grayopaque</span>
+              <span onclick="selectPalette('graytransparent')">graytransparent</span>
+              <span onclick="selectPalette('hsl')">hsl</span>
+              <span onclick="selectPalette('Banded')">Banded</span>
+              <span onclick="selectPalette('BRY')">BRY</span>
+              <span onclick="selectPalette('BGRY')">BGRY</span>
+              <span onclick="selectPalette('Gamma')">Gamma</span>
+              <span onclick="selectPalette('Hot1')">Hot1</span>
+              <span onclick="selectPalette('Hot2')">Hot2</span>
+              <span onclick="selectPalette('Ice')">Ice</span>
+              <span onclick="selectPalette('Lighthues')">Lighthues</span>
+              <span onclick="selectPalette('Rich')">Rich</span>
+              <span onclick="selectPalette('SmoothRich')">SmoothRich</span>
+              <span onclick="selectPalette('Lut16')">Lut16</span>
+              <span onclick="selectPalette('BlueGreenDivergent')">BlueGreenDivergent</span>
+              <span onclick="selectPalette('AsymmetricBlueGreenDivergent')">AsymmetricBlueGreenDivergent</span>
+              <span onclick="selectPalette('GreenGold')">GreenGold</span>
+              <span onclick="selectPalette('LinearGreen')">LinearGreen</span>
+              <span onclick="selectPalette('LinearTurquois')">LinearTurquois</span>
+              <span onclick="selectPalette('MutedBlueGreen')">MutedBlueGreen</span>
+              <span onclick="selectPalette('ExtendedCoolWarm')">ExtendedCoolWarm</span>
+              <span onclick="selectPalette('AsymmetricBlueOrangeDivergent')">AsymmetricBlueOrangeDivergent</span>
+              <span onclick="selectPalette('LinearYellow')">LinearYellow</span>
+              <span onclick="selectPalette('LinearGray5')">LinearGray5</span>
+              <span onclick="selectPalette('LinearGray4')">LinearGray4</span>
+            </div>
+          </div>
+        </td>
+        <td><div id="selected_palette" class="selected-item">None</div></td>
       </tr>
     </table>
   </div>

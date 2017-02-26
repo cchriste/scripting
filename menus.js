@@ -1,23 +1,32 @@
-// When the user clicks on the button, toggle between hiding and showing the dropdown content 
 function serverDropdownOnClick() {
   hideDiv("datasetsDropdown");
+  hideDiv("paletteDropdown");
   document.getElementById("serverDropdown").classList.toggle("show");
 }
 
-// When the user clicks on the button, toggle between hiding and showing the dropdown content 
 function datasetDropdownOnclick() {
   hideDiv("serverDropdown");
+  hideDiv("paletteDropdown");
   document.getElementById("datasetsDropdown").classList.toggle("show");
   document.getElementById("datasetsFilterInput").value="";
-  filterFunction();
+  filter = document.getElementById("datasetsFilterInput");
+  filterFunction(filter);
 }
 
-function filterFunction() {
-  var input, filter, ul, li, a, i;
-  input = document.getElementById("datasetsFilterInput");
+function paletteDropdownOnclick() {
+  //console.log("paletteDropdownOnclick: this="+this); //it's the global Window
+  hideDiv("serverDropdown");
+  hideDiv("datasetsDropdown");
+  document.getElementById("paletteDropdown").classList.toggle("show");
+  document.getElementById("paletteFilterInput").value="";
+  filter = document.getElementById("paletteFilterInput");
+  filterFunction(filter);
+}
+
+function filterFunction(input) {
+  var filter, ul, li, a, i;
   filter = input.value.toUpperCase();
-  div = document.getElementById("datasetsDropdown");
-  a = div.getElementsByTagName("a");
+  a = input.parentNode.getElementsByTagName("span");
   for (i = 0; i < a.length; i++) {
     if (a[i].innerHTML.toUpperCase().indexOf(filter) > -1) {
       a[i].style.display = "";
@@ -36,7 +45,7 @@ function hideDiv(id) {
 
 // Close the dropdown menu if the user clicks outside of it
 window.onclick = function(event) {
-  if (!event.target.matches('.dropbtn') && !event.target.matches('#datasetsFilterInput')) 
+  if (!event.target.matches('.dropbtn') && !event.target.matches('#datasetsFilterInput') && !event.target.matches('#paletteFilterInput')) 
   {
     var dropdowns = document.getElementsByClassName("dropdown-content");
     var i;
@@ -211,3 +220,10 @@ function readDetails(header) {
 //  console.log("  physical: "+details.physical_dims);
   return details;
 }
+
+//select palette
+function selectPalette(palette) {
+  console.log("selectPalette("+palette+")");
+  document.getElementById("selected_palette").innerHTML=palette;
+}
+

@@ -55,7 +55,7 @@
 
 
 /*search/filter dropdown*/
-#datasetsFilterInput {
+.filterInput {
   border-box: box-sizing;
   background-image: url('images/searchicon.png');
   background-position: 14px 12px;

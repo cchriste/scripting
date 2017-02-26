@@ -55,6 +55,6 @@ function openDataset(server, dataset, width, height, levels){
     sequenceMode: false,
     minZoomImageRatio: 0.25,
     maxZoomImageRatio: 4.0,
-    tileSources:   [add_dataset("http://"+server+"/mod_visus?",dataset,width,height,levels,tile_size)]
+    tileSources:   [add_dataset(server+"/mod_visus?",dataset,width,height,levels,tile_size)]
   }); 
 }
