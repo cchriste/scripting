@@ -1,24 +1,36 @@
 
-var add_dataset=function(ds_server,ds_name,ds_width,ds_height,ds_levels,tile_size) {
-    var half_max_levels=parseInt(ds_levels/2,10);
-    return {
-          height: ds_height,
-          width:  ds_width,
-          tileSize: tile_size,
-          minLevel: 0,
-          maxLevel: half_max_levels,
-          getTileUrl: function( level, x, y ){
-            var scale = Math.pow(2, half_max_levels-level);
-            var level_tile_size = tile_size*scale;
+var add_dataset=function(ds_server,ds_name,ds_width,ds_height,ds_levels,tile_size,palette,field) {
+  var half_max_levels=parseInt(ds_levels/2,10);
+  if (palette !== undefined) {
+    palette="&palette="+palette;
+  }
+  else {
+    palette="";
+  }
+  if (field !== undefined) {
+    field="&field="+field;
+  }                                      
+  else {
+    field="";
+  }
+  return {
+    height: ds_height,
+    width:  ds_width,
+    tileSize: tile_size,
+    minLevel: 0,
+    maxLevel: half_max_levels,
+    getTileUrl: function( level, x, y ){
+      var scale = Math.pow(2, half_max_levels-level);
+      var level_tile_size = tile_size*scale;
 
-            var bbox0 = level_tile_size*x
-            var bbox1 = Math.min(level_tile_size*(x+1)-1, ds_width)
-            var bbox3 = ds_height - level_tile_size*y
-            var bbox2 = ds_height - Math.min(level_tile_size*(y+1)-1, ds_height)
-                                      
-            return (ds_server + "action=boxquery&box=" + bbox0 + "%20" + bbox1+ "%20" + bbox2 + "%20" + bbox3 + "&compression=png&dataset=" + ds_name + "&maxh=" + ds_levels + "&toh=" + level*2 + "&palette=LinearGray4")
-          }
-       };
+      var bbox0 = level_tile_size*x
+      var bbox1 = Math.min(level_tile_size*(x+1)-1, ds_width)
+      var bbox3 = ds_height - level_tile_size*y
+      var bbox2 = ds_height - Math.min(level_tile_size*(y+1)-1, ds_height)
+
+      return (ds_server + "action=boxquery&box=" + bbox0 + "%20" + bbox1+ "%20" + bbox2 + "%20" + bbox3 + "&compression=png&dataset=" + ds_name + "&maxh=" + ds_levels + "&toh=" + level*2 + palette + field)
+    }
+  };
 }
 
 var multi_data = function(widths, heights, levels, datasets, servers){
@@ -41,7 +53,7 @@ var multi_data = function(widths, heights, levels, datasets, servers){
       }); 
 }
 
-function openDataset(server, dataset, width, height, levels){
+function openDataset(server, dataset, width, height, levels, palette, field){
   var tile_size=512;
   OpenSeadragon({
     id: "viewer",
@@ -53,8 +65,9 @@ function openDataset(server, dataset, width, height, levels){
     defaultZoomLevel: 0, //fit best
     maxImageCacheCount: 500, //default is 200 "per drawer"
     sequenceMode: false,
+    preserveViewport: true,  //probably ignored when sequenceMode=false
     minZoomImageRatio: 0.25,
     maxZoomImageRatio: 4.0,
-    tileSources:   [add_dataset(server+"/mod_visus?",dataset,width,height,levels,tile_size)]
+    tileSources:   [add_dataset(server+"/mod_visus?",dataset,width,height,levels,tile_size,palette,field)]
   }); 
 }

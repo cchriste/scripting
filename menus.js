@@ -1,3 +1,8 @@
+//top-level namespace for visus-related globals
+visus = { name: "ViSUS Web Viewer",
+          dataset_details: undefined
+}
+
 function serverDropdownOnClick() {
   hideDiv("datasetsDropdown");
   hideDiv("paletteDropdown");
@@ -58,6 +63,7 @@ window.onclick = function(event) {
   }
 }
 
+//is this even used?
 function getDataset(code) {
   return data.filter(
     function(data) {
@@ -73,15 +79,8 @@ function selectDataset(server,dataset) {
     .then(function(details) {
       console.log("selectDataset("+server+","+dataset+")");
       document.getElementById("selected_dataset").innerHTML=dataset;
-      var viewer=document.getElementById("viewer");
-      var sidebar=document.getElementById("sidebar");
-      var parent=viewer.parentNode;
-      parent.removeChild(viewer);
-      var new_viewer=document.createElement("div");
-      new_viewer.id="viewer";
-      new_viewer.className="openseadragon";
-      parent.insertBefore(new_viewer,sidebar);
-      openDataset(server,dataset,details.dims[0],details.dims[1],details.levels); //yikes, hardcoded dimensions! todo: read these from server
+      replaceViewer();
+      openDataset(server,dataset,details.dims[0],details.dims[1],details.levels);
     }).catch(function(error) {
       console.log("There was a problem selecting the dataset: "+error);
     });
@@ -218,6 +217,7 @@ function readDetails(header) {
   console.log("  fields: "+details.fields);
   console.log("  timesteps: "+details.timesteps);
 //  console.log("  physical: "+details.physical_dims);
+  visus.dataset_details=details;
   return details;
 }
 
@@ -225,5 +225,22 @@ function readDetails(header) {
 function selectPalette(palette) {
   console.log("selectPalette("+palette+")");
   document.getElementById("selected_palette").innerHTML=palette;
+  var server=document.getElementById("selected_server").innerHTML;
+  var dataset=document.getElementById("selected_dataset").innerHTML;
+  if (visus.dataset_details !== undefined) {
+    var details=visus.dataset_details;
+    replaceViewer();
+    openDataset(server,dataset,details.dims[0],details.dims[1],details.levels,palette);
+  }
 }
 
+function replaceViewer() {
+  var viewer=document.getElementById("viewer");
+  var sidebar=document.getElementById("sidebar");
+  var parent=viewer.parentNode;
+  parent.removeChild(viewer);
+  var new_viewer=document.createElement("div");
+  new_viewer.id="viewer";
+  new_viewer.className="openseadragon";
+  parent.insertBefore(new_viewer,sidebar);
+}
