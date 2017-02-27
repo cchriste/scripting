@@ -1,6 +1,8 @@
 //top-level namespace for visus-related globals
 visus = { name: "ViSUS Web Viewer",
-          dataset_details: undefined
+          dataset_details: undefined,
+          tile_size: 512,
+          osd: null
 }
 
 function serverDropdownOnClick() {
@@ -267,6 +269,26 @@ function selectField(field) {
   updateAll();
 }
 
+//update range
+function updateRange() {
+  console.log("updateRange()");
+  var script=document.getElementById("scripteditor").value;
+  var palette=document.getElementById("selected_palette").innerHTML;
+  var server=document.getElementById("selected_server").innerHTML;
+  var dataset=document.getElementById("selected_dataset").innerHTML;
+  var minRng=parseFloat(document.getElementById("rangeMin").value);
+  var maxRng=parseFloat(document.getElementById("rangeMax").value);
+  var details=visus.dataset_details;
+  var tileSource=[add_dataset(server+"/mod_visus?palette_min="+minRng+"&palette_max="+maxRng+"&",dataset,details.dims[0],details.dims[1],details.levels,visus.tile_size,palette,encodeURIComponent(script))]
+  // var osd=visus.osd;
+  // osd.addTiledImage({
+  //   tileSource:add_dataset(tileSource),
+  //   index:0,
+  //   replace:true
+  // });
+  updateAll();
+}
+
 function replaceViewer() {
   var viewer=document.getElementById("viewer");
   var sidebar=document.getElementById("sidebar");
@@ -283,6 +305,8 @@ function updateAll() {
   var palette=document.getElementById("selected_palette").innerHTML;
   var server=document.getElementById("selected_server").innerHTML;
   var dataset=document.getElementById("selected_dataset").innerHTML;
+  var minRng=parseFloat(document.getElementById("rangeMin").value);
+  var maxRng=parseFloat(document.getElementById("rangeMax").value);
   document.getElementById("selected_field").innerHTML=script;
   if (visus.dataset_details !== undefined) {
     var details=visus.dataset_details;
@@ -292,7 +316,8 @@ function updateAll() {
                 details.dims[0],details.dims[1],
                 details.levels,
                 palette==="None"?undefined:palette,
-                script);
+                script,
+                minRng,maxRng);
   }
 }
 

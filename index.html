@@ -134,6 +134,15 @@
           </tr>
         </table>
       </tr>
+      <tr>
+        <td>
+          <div class="dropdown">
+            <button class="dropbtn" style="disabled:true;">Range</button>
+          </div>
+        </td>
+        <td><input type="text" placeholder="0.0" id="rangeMin" class="rangeInput" onblur="updateRange()"></td>
+        <td><input type="text" placeholder="1.0" id="rangeMax" class="rangeInput" onblur="updateRange()"></td>
+      </tr>
     </table>
   </div>
   <div id="cleared"></div>

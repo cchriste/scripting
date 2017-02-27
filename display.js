@@ -34,7 +34,7 @@ var add_dataset=function(ds_server,ds_name,ds_width,ds_height,ds_levels,tile_siz
 }
 
 var multi_data = function(widths, heights, levels, datasets, servers){
-    var tile_size=512;
+  var tile_size=visus.tile_size;
       OpenSeadragon({
         id: "viewer",
         prefixUrl: "openseadragon/images/",
@@ -53,9 +53,12 @@ var multi_data = function(widths, heights, levels, datasets, servers){
       }); 
 }
 
-function openDataset(server, dataset, width, height, levels, palette, field){
-  var tile_size=512;
-  OpenSeadragon({
+function openDataset(server, dataset, width, height, levels, palette, field, minRng, maxRng){
+  var tile_size=visus.tile_size;
+  var url=server+"/mod_visus?"+
+    (minRng?"palette_min="+minRng+"&":"")+
+    (maxRng?"palette_max="+maxRng+"&":"");
+  visus.osd=OpenSeadragon({
     id: "viewer",
     prefixUrl: "openseadragon/images/",
     showNavigator: true,
@@ -68,6 +71,9 @@ function openDataset(server, dataset, width, height, levels, palette, field){
     preserveViewport: true,  //probably ignored when sequenceMode=false
     minZoomImageRatio: 0.25,
     maxZoomImageRatio: 4.0,
-    tileSources:   [add_dataset(server+"/mod_visus?",dataset,width,height,levels,tile_size,palette,encodeURIComponent(field))]
-  }); 
+    tileSources:   [add_dataset(url,dataset,
+                                width,height,levels,tile_size,
+                                palette,
+                                encodeURIComponent(field))]
+  });
 }
