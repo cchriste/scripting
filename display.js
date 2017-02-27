@@ -68,6 +68,6 @@ function openDataset(server, dataset, width, height, levels, palette, field){
     preserveViewport: true,  //probably ignored when sequenceMode=false
     minZoomImageRatio: 0.25,
     maxZoomImageRatio: 4.0,
-    tileSources:   [add_dataset(server+"/mod_visus?",dataset,width,height,levels,tile_size,palette,field)]
+    tileSources:   [add_dataset(server+"/mod_visus?",dataset,width,height,levels,tile_size,palette,encodeURIComponent(field))]
   }); 
 }

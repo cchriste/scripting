@@ -64,7 +64,6 @@
           </div>
         </td>
         <td><div id="selected_dataset" class="selected-item">None</div></td>
-        <div id="dataset_details" class="dataset-details"></div>
       </tr>
       <tr>
         <td>
@@ -101,6 +100,30 @@
           </div>
         </td>
         <td><div id="selected_palette" class="selected-item">None</div></td>
+      </tr>
+      <tr>
+        <td>
+          <div class="dropdown">
+            <button onclick="fieldDropdownOnclick()" class="dropbtn">Field</button>
+            <div id="fieldDropdown" class="dropdown-content">
+              <input type="text" placeholder="Search.." id="fieldFilterInput" class="filterInput" onkeyup="filterFunction(this)">
+              <span onclick="selectField('data')">data</span>
+              <span onclick="selectField('field2')">field2</span>
+            </div>
+          </div>
+        </td>
+      </tr>
+      <tr>
+        <td colspan="100%">
+          <div class="dropdown" style="height:500px; width:96%;">
+              <textarea class="editor" id="scripteditor" >output=input.data</textarea>
+          </div>
+        </td>
+      </tr>
+      <tr>
+        <td colspan="100%">
+          <button class="evalbtn" onclick="updateAll()" >Eval</button>
+        </td>
       </tr>
     </table>
   </div>

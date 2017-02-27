@@ -4,12 +4,14 @@ visus = { name: "ViSUS Web Viewer",
 }
 
 function serverDropdownOnClick() {
+  hideDiv("fieldDropdown");
   hideDiv("datasetsDropdown");
   hideDiv("paletteDropdown");
   document.getElementById("serverDropdown").classList.toggle("show");
 }
 
 function datasetDropdownOnclick() {
+  hideDiv("fieldDropdown");
   hideDiv("serverDropdown");
   hideDiv("paletteDropdown");
   document.getElementById("datasetsDropdown").classList.toggle("show");
@@ -19,12 +21,24 @@ function datasetDropdownOnclick() {
 }
 
 function paletteDropdownOnclick() {
-  //console.log("paletteDropdownOnclick: this="+this); //it's the global Window
+  hideDiv("fieldDropdown");
   hideDiv("serverDropdown");
   hideDiv("datasetsDropdown");
   document.getElementById("paletteDropdown").classList.toggle("show");
   document.getElementById("paletteFilterInput").value="";
   filter = document.getElementById("paletteFilterInput");
+  filterFunction(filter);
+}
+
+function fieldDropdownOnclick() {
+  hideDiv("serverDropdown");
+  hideDiv("datasetsDropdown");
+  hideDiv("paletteDropdown");
+  var field=document.getElementById("fieldDropdown");
+  console.log("fieldDropdownOnclick()");
+  document.getElementById("fieldDropdown").classList.toggle("show");
+  document.getElementById("fieldFilterInput").value="";
+  filter = document.getElementById("fieldFilterInput");
   filterFunction(filter);
 }
 
@@ -49,8 +63,10 @@ function hideDiv(id) {
 }
 
 // Close the dropdown menu if the user clicks outside of it
-window.onclick = function(event) {
-  if (!event.target.matches('.dropbtn') && !event.target.matches('#datasetsFilterInput') && !event.target.matches('#paletteFilterInput')) 
+window.onclick = function(event){onclick1(event)}
+
+function onclick1(event) {
+  if (!event.target.matches('.dropbtn') && !event.target.matches('#datasetsFilterInput') && !event.target.matches('#paletteFilterInput') && !event.target.matches('#fieldFilterInput')) 
   {
     var dropdowns = document.getElementsByClassName("dropdown-content");
     var i;
@@ -79,8 +95,10 @@ function selectDataset(server,dataset) {
     .then(function(details) {
       console.log("selectDataset("+server+","+dataset+")");
       document.getElementById("selected_dataset").innerHTML=dataset;
+      //<ctc> probably this could be cleaned up replaced with updateAll()
       replaceViewer();
-      openDataset(server,dataset,details.dims[0],details.dims[1],details.levels);
+      document.getElementById("scripteditor").value=details.fields[0];
+      openDataset(server,dataset,details.dims[0],details.dims[1],details.levels,undefined,details.fields[0]);
     }).catch(function(error) {
       console.log("There was a problem selecting the dataset: "+error);
     });
@@ -159,6 +177,8 @@ function loadDataset(url) {
 function readDetails(header) {
   details={};
 
+  console.log("dataset header: "+header);
+
   var lines = header.split('\n');
   for(var i = 0;i < lines.length;i++){
     if (lines[i]=="(box)") {
@@ -225,13 +245,7 @@ function readDetails(header) {
 function selectPalette(palette) {
   console.log("selectPalette("+palette+")");
   document.getElementById("selected_palette").innerHTML=palette;
-  var server=document.getElementById("selected_server").innerHTML;
-  var dataset=document.getElementById("selected_dataset").innerHTML;
-  if (visus.dataset_details !== undefined) {
-    var details=visus.dataset_details;
-    replaceViewer();
-    openDataset(server,dataset,details.dims[0],details.dims[1],details.levels,palette);
-  }
+  updateAll();
 }
 
 function replaceViewer() {
@@ -243,4 +257,16 @@ function replaceViewer() {
   new_viewer.id="viewer";
   new_viewer.className="openseadragon";
   parent.insertBefore(new_viewer,sidebar);
+}
+
+function updateAll() {
+  var script=document.getElementById("scripteditor").value;
+  var palette=document.getElementById("selected_palette").innerHTML;
+  var server=document.getElementById("selected_server").innerHTML;
+  var dataset=document.getElementById("selected_dataset").innerHTML;
+  if (visus.dataset_details !== undefined) {
+    var details=visus.dataset_details;
+    replaceViewer();
+    openDataset(server,dataset,details.dims[0],details.dims[1],details.levels,palette,script);
+  }
 }

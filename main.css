@@ -53,6 +53,23 @@
   background-color: #3e8e41;
 }
 
+.evalbtn {
+  margin-right:20px;
+  background-color: #4CAF50;
+  color: white;
+  padding: 8px;
+  font-size: 16px;
+  border: none;
+  cursor: pointer;
+  min-width: 75px;
+  float:right;
+}
+
+/* Dropdown button on hover & focus */
+.evalbtn:hover, .evalbtn:focus {
+  background-color: #3e8e41;
+}
+
 
 /*search/filter dropdown*/
 .filterInput {
@@ -109,8 +126,9 @@
 /* Show the dropdown menu (use JS to add this class to the .dropdown-content container when the user clicks on the dropdown button) */
 .show {display:block;}
 
-/* Dataset details (Hidden) */
-.dataset-details {
-  display: none;
+.editor {
+  font-size: 14px;
+  height: 100%;
+  width: 100%;
+  max-width:340px;
 }
-
