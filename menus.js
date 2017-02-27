@@ -308,12 +308,6 @@ function toggleScriptEditor() {
       panel.style.maxHeight = null;
     }
     selectedfield.style.display="block";
-    // var max_line_length=18;
-    // var eol_idx=script.value.indexOf(';');
-    // var shortscript=script.value.substr(0,(eol_idx>0)?Math.min(eol_idx,max_line_length):max_line_length);
-    // if (script.value.length>max_line_length)
-    //   shortscript+="...";
-    // selectedfield.innerHTML=shortscript;
     selectedfield.innerHTML=script.value;
   }
   else {
