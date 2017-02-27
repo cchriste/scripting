@@ -71,6 +71,7 @@
             <button onclick="paletteDropdownOnclick()" class="dropbtn">Palette</button>
             <div id="paletteDropdown" class="dropdown-content">
               <input type="text" placeholder="Search.." id="paletteFilterInput" class="filterInput" onkeyup="filterFunction(this)">
+              <span onclick="selectPalette('None')">None</span>
               <span onclick="selectPalette('grayopaque')">grayopaque</span>
               <span onclick="selectPalette('graytransparent')">graytransparent</span>
               <span onclick="selectPalette('hsl')">hsl</span>
@@ -102,28 +103,36 @@
         <td><div id="selected_palette" class="selected-item">None</div></td>
       </tr>
       <tr>
-        <td>
-          <div class="dropdown">
-            <button onclick="fieldDropdownOnclick()" class="dropbtn">Field</button>
-            <div id="fieldDropdown" class="dropdown-content">
-              <input type="text" placeholder="Search.." id="fieldFilterInput" class="filterInput" onkeyup="filterFunction(this)">
-              <span onclick="selectField('data')">data</span>
-              <span onclick="selectField('field2')">field2</span>
-            </div>
-          </div>
-        </td>
-      </tr>
-      <tr>
-        <td colspan="100%">
-          <div class="dropdown" style="height:500px; width:96%;">
-              <textarea class="editor" id="scripteditor" >output=input.data</textarea>
-          </div>
-        </td>
-      </tr>
-      <tr>
-        <td colspan="100%">
-          <button class="evalbtn" onclick="updateAll()" >Eval</button>
-        </td>
+        <table width="100%">
+          <tr>
+            <td>
+              <div class="dropdown">
+                <button onclick="fieldDropdownOnclick()" class="dropbtn">Field</button>
+                <div id="fieldDropdown" class="dropdown-content">
+                  <input type="text" placeholder="Search.." id="fieldFilterInput" class="filterInput" onkeyup="filterFunction(this)">
+                </div>
+              </div>
+            </td>
+            <td style="width:100%;text-align:right;"><div id="selected_field" class="selected-field-item">None</div></td>
+            <td><button class="evalbtn" id="toggleScriptEditorButton" onclick="toggleScriptEditor()">+</button></td>
+          </tr>
+          <tr>
+            <td colspan="100%">
+              <div id="scripteditorpanel" class="accordion-panel">
+                <div class="dropdown" style="height:400px; width:96%;">
+                  <textarea class="editor" id="scripteditor" >output=input.data;</textarea>
+                </div>
+              </div>
+            </td>
+          </tr>
+          <tr>
+            <td colspan="100%">
+              <div id="scripteditorpanel" class="accordion-panel">
+                <button class="evalbtn" onclick="updateAll()" >Eval</button>
+              </div>
+            </td>
+          </tr>
+        </table>
       </tr>
     </table>
   </div>

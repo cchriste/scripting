@@ -34,8 +34,6 @@ function fieldDropdownOnclick() {
   hideDiv("serverDropdown");
   hideDiv("datasetsDropdown");
   hideDiv("paletteDropdown");
-  var field=document.getElementById("fieldDropdown");
-  console.log("fieldDropdownOnclick()");
   document.getElementById("fieldDropdown").classList.toggle("show");
   document.getElementById("fieldFilterInput").value="";
   filter = document.getElementById("fieldFilterInput");
@@ -88,17 +86,31 @@ function getDataset(code) {
   );
 }
 
+function populateFields(fields) {
+  div = document.getElementById("fieldDropdown");
+  input = document.getElementById("fieldFilterInput");
+  while (div.hasChildNodes()) {
+    div.removeChild(div.lastChild);
+  }
+  div.appendChild(input);
+  for (var i=0;i<fields.length;i++) {
+    var field=document.createElement("span");
+    field.setAttribute("onclick","selectField('"+fields[i]+"')");
+    field.innerHTML=fields[i];
+    div.appendChild(field);
+  }
+}
+
 //select dataset
 function selectDataset(server,dataset) {
+  console.log("selectDataset("+server+","+dataset+")");
   url=server+'/mod_visus?action=readdataset&dataset='+dataset;
   loadDataset(url)
     .then(function(details) {
-      console.log("selectDataset("+server+","+dataset+")");
+      populateFields(details.fields);
       document.getElementById("selected_dataset").innerHTML=dataset;
-      //<ctc> probably this could be cleaned up replaced with updateAll()
-      replaceViewer();
       document.getElementById("scripteditor").value=details.fields[0];
-      openDataset(server,dataset,details.dims[0],details.dims[1],details.levels,undefined,details.fields[0]);
+      updateAll();
     }).catch(function(error) {
       console.log("There was a problem selecting the dataset: "+error);
     });
@@ -248,6 +260,13 @@ function selectPalette(palette) {
   updateAll();
 }
 
+//select field
+function selectField(field) {
+  console.log("selectField("+field+")");
+  document.getElementById("scripteditor").value=field;
+  updateAll();
+}
+
 function replaceViewer() {
   var viewer=document.getElementById("viewer");
   var sidebar=document.getElementById("sidebar");
@@ -264,9 +283,47 @@ function updateAll() {
   var palette=document.getElementById("selected_palette").innerHTML;
   var server=document.getElementById("selected_server").innerHTML;
   var dataset=document.getElementById("selected_dataset").innerHTML;
+  document.getElementById("selected_field").innerHTML=script;
   if (visus.dataset_details !== undefined) {
     var details=visus.dataset_details;
     replaceViewer();
-    openDataset(server,dataset,details.dims[0],details.dims[1],details.levels,palette,script);
+    openDataset(server,
+                dataset,
+                details.dims[0],details.dims[1],
+                details.levels,
+                palette==="None"?undefined:palette,
+                script);
   }
 }
+
+function toggleScriptEditor() {
+  var panels = document.getElementsByClassName("accordion-panel");
+  var button=document.getElementById("toggleScriptEditorButton");
+  var script=document.getElementById("scripteditor");
+  var selectedfield=document.getElementById("selected_field");
+  if (panels[0].style.maxHeight) {
+    button.innerHTML="+";
+    for (var i = 0; i < panels.length; i++) {
+      var panel = panels[i];
+      panel.style.maxHeight = null;
+    }
+    selectedfield.style.display="block";
+    // var max_line_length=18;
+    // var eol_idx=script.value.indexOf(';');
+    // var shortscript=script.value.substr(0,(eol_idx>0)?Math.min(eol_idx,max_line_length):max_line_length);
+    // if (script.value.length>max_line_length)
+    //   shortscript+="...";
+    // selectedfield.innerHTML=shortscript;
+    selectedfield.innerHTML=script.value;
+  }
+  else {
+    button.innerHTML="-";
+    for (var i = 0; i < panels.length; i++) {
+      var panel = panels[i];
+      panel.style.maxHeight = panel.scrollHeight + "px";
+    }
+    selectedfield.style.display="none";
+  }
+}
+
+

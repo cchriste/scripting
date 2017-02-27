@@ -54,7 +54,7 @@
 }
 
 .evalbtn {
-  margin-right:20px;
+  margin-right:6px;
   background-color: #4CAF50;
   color: white;
   padding: 8px;
@@ -123,6 +123,17 @@
   color: #ffffff;
 }
 
+.selected-field-item {
+  font-size: 14px;
+  margin-right: 16px;
+  text-align: right;
+  color: #ffffff;
+  width:130px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
 /* Show the dropdown menu (use JS to add this class to the .dropdown-content container when the user clicks on the dropdown button) */
 .show {display:block;}
 
@@ -130,5 +141,21 @@
   font-size: 14px;
   height: 100%;
   width: 100%;
-  max-width:340px;
+  max-width:350px;
 }
+
+.accordion-panel {
+  /* font-size: 14px; */
+  /* height: 100%; */
+  /* width: 100%; */
+  /* max-width:340px; */
+  transition: 0.4s;
+  /* margin-right: 12px; */
+  /* margin-left: 8px; */
+  /* position: relative; */
+  /* display: none; */
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height 0.6s ease-out;
+}
+
