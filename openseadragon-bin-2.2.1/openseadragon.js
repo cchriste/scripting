@@ -1,5 +1,5 @@
 //! openseadragon 2.2.1
-//! Built on 2016-07-01
+//! Built on 2016-06-21
 //! Git commit: v2.2.1-0-babdefd
 //! http://openseadragon.github.io
 //! License: http://openseadragon.github.io/license/
@@ -15471,8 +15471,6 @@ function ImageJob ( options ) {
 ImageJob.prototype = {
     errorMsg: null,
     start: function(){
-        $.console.warn('[ImageJob.start] starting ImageJob...');
-
         var _this = this;
 
         this.image = new Image();
@@ -15482,7 +15480,6 @@ ImageJob.prototype = {
         }
 
         this.image.onload = function(){
-            $.console.log('[ImageJob.image.onload] this.parent: ',this.parent);
             _this.finish( true );
         };
         this.image.onabort = this.image.onerror = function(){
@@ -18854,7 +18851,6 @@ $.extend($.TiledImage.prototype, $.EventSource.prototype, /** @lends OpenSeadrag
     draw: function() {
         if (this.opacity !== 0) {
             this._midDraw = true;
-            $.console.warn('[TiledImage.draw] updating viewport...');
             updateViewport(this);
             this._midDraw = false;
         }

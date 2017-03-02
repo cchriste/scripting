@@ -53,11 +53,12 @@ var multi_data = function(widths, heights, levels, datasets, servers){
       }); 
 }
 
-function openDataset(server, dataset, width, height, levels, palette, field, minRng, maxRng){
+function openDataset(server, dataset, width, height, levels, palette, field, minRng, maxRng, time){
   var tile_size=visus.tile_size;
   var url=server+"/mod_visus?"+
     (minRng?"palette_min="+minRng+"&":"")+
-    (maxRng?"palette_max="+maxRng+"&":"");
+    (maxRng?"palette_max="+maxRng+"&":"")+
+    (time?"time="+time+"&":"");
   visus.osd=OpenSeadragon({
     id: "viewer",
     prefixUrl: "openseadragon/images/",

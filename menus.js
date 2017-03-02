@@ -112,6 +112,7 @@ function selectDataset(server,dataset) {
       populateFields(details.fields);
       document.getElementById("selected_dataset").innerHTML=dataset;
       document.getElementById("scripteditor").value=details.fields[0];
+      document.getElementById("time_range").innerHTML=details.timesteps[0]+" to "+details.timesteps[1];
       updateAll();
     }).catch(function(error) {
       console.log("There was a problem selecting the dataset: "+error);
@@ -289,6 +290,48 @@ function updateRange() {
   updateAll();
 }
 
+//update time
+function updateTime() {
+  console.log("updateTime()");
+  var script=document.getElementById("scripteditor").value;
+  var palette=document.getElementById("selected_palette").innerHTML;
+  var server=document.getElementById("selected_server").innerHTML;
+  var dataset=document.getElementById("selected_dataset").innerHTML;
+  var minRng=parseFloat(document.getElementById("rangeMin").value);
+  var maxRng=parseFloat(document.getElementById("rangeMax").value);
+  var time=parseInt(document.getElementById("time").value);
+  var details=visus.dataset_details;
+  var tileSource=[add_dataset(server+"/mod_visus?palette_min="+minRng+"&palette_max="+maxRng+"&"+"time="+time+"&",dataset,details.dims[0],details.dims[1],details.levels,visus.tile_size,palette,encodeURIComponent(script))]
+  // var osd=visus.osd;
+  // osd.addTiledImage({
+  //   tileSource:add_dataset(tileSource),
+  //   index:0,
+  //   replace:true
+  // });
+  updateAll();
+}
+
+//update time
+function updateTimeKeyup(event) {
+  if (event.which==13)
+  {
+    console.log("updateTime-pressedEnter()");
+    var time=parseInt(document.getElementById("time").value);
+    var slider=document.getElementById("timeRange");
+    slider.value=clamp(time,slider.min,slider.max);
+    updateTime();
+  }
+}
+
+//update time
+function rangeKeyup(event) {
+  if (event.which==13)
+  {
+    console.log("updateRange-pressedEnter()");
+    updateRange();
+  }
+}
+
 function replaceViewer() {
   var viewer=document.getElementById("viewer");
   var sidebar=document.getElementById("sidebar");
@@ -304,9 +347,10 @@ function updateAll() {
   var script=document.getElementById("scripteditor").value;
   var palette=document.getElementById("selected_palette").innerHTML;
   var server=document.getElementById("selected_server").innerHTML;
-  var dataset=document.getElementById("selected_dataset").innerHTML;
+  var dataset=document.getElementById("selected_dataset").innerHTML+"_midx";
   var minRng=parseFloat(document.getElementById("rangeMin").value);
   var maxRng=parseFloat(document.getElementById("rangeMax").value);
+  var time=parseInt(document.getElementById("time").value);
   document.getElementById("selected_field").innerHTML=script;
   if (visus.dataset_details !== undefined) {
     var details=visus.dataset_details;
@@ -317,7 +361,9 @@ function updateAll() {
                 details.levels,
                 palette==="None"?undefined:palette,
                 script,
-                minRng,maxRng);
+                minRng,maxRng,
+                time
+               );
   }
 }
 
@@ -346,3 +392,49 @@ function toggleScriptEditor() {
 }
 
 
+function clamp(val,min,max) {
+  return Math.min(Math.max(min,val),max);
+}
+
+
+function modifyOffset() {
+	var el, newPoint, newPlace, offset, siblings, k;
+	width    = this.offsetWidth;
+	newPoint = (this.value - this.getAttribute("min")) / (this.getAttribute("max") - this.getAttribute("min"));
+	offset   = -1;
+	if (newPoint < 0) { newPlace = 0;  }
+	else if (newPoint > 1) { newPlace = width; }
+	else { newPlace = width * newPoint + offset; offset -= newPoint;}
+	siblings = this.parentNode.childNodes;
+	for (var i = 0; i < siblings.length; i++) {
+		sibling = siblings[i];
+		if (sibling.id == this.id) { k = true; }
+		if ((k == true) && (sibling.nodeName == "OUTPUT")) {
+			outputTag = sibling;
+		}
+	}
+	outputTag.style.left       = newPlace + "px";
+	outputTag.style.marginLeft = offset + "%";
+	outputTag.innerHTML        = this.value;
+}
+
+function modifyInputs() {
+    
+	var inputs = document.getElementsByTagName("input");
+	for (var i = 0; i < inputs.length; i++) {
+		if (inputs[i].getAttribute("type") == "range") {
+			inputs[i].onchange = modifyOffset;
+
+			// the following taken from http://stackoverflow.com/questions/2856513/trigger-onchange-event-manually
+			if ("fireEvent" in inputs[i]) {
+			    inputs[i].fireEvent("onchange");
+			} else {
+			    var evt = document.createEvent("HTMLEvents");
+			    evt.initEvent("change", false, true);
+			    inputs[i].dispatchEvent(evt);
+			}
+		}
+	}
+}
+
+modifyInputs();
