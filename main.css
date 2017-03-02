@@ -53,8 +53,21 @@
   background-color: #3e8e41;
 }
 
+.showscriptbtn {
+  margin-right:16px;
+  background-color: #4CAF50;
+  color: white;
+  padding: 8px;
+  font-size: 16px;
+  border: none;
+  cursor: pointer;
+  min-width: 35px;
+  float:right;
+}
+
 .evalbtn {
-  margin-right:6px;
+  margin-top:6px;
+  margin-right:16px;
   background-color: #4CAF50;
   color: white;
   padding: 8px;
@@ -143,8 +156,8 @@
   margin-right: 16px;
   text-align: right;
   color: #ffffff;
-  display: table-cell;
-  vertical-align: middle;
+  /* display: table-cell; */
+  /* vertical-align: middle; */
 }
 
 .infotext {
@@ -156,11 +169,12 @@
 }
 
 .selected-field-item {
+  float: left;
   font-size: 14px;
-  margin-right: 16px;
+  margin-right: 6px;
   text-align: right;
   color: #ffffff;
-  width:130px;
+  width:175px;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -191,31 +205,3 @@
   transition: max-height 0.6s ease-out;
 }
 
-
-output { 
-  position: absolute;
-  background-image: linear-gradient(#444444, #999999);
-  width: 40px; 
-  height: 30px; 
-  text-align: center; 
-  color: white; 
-  border-radius: 10px; 
-  display: inline-block; 
-  font: bold 15px/30px Georgia;
-  bottom: 175%;
-  left: 0;
-}
-output:after { 
-  content: "";
-  position: absolute; 
-  width: 0;
-  height: 0;
-  border-top: 10px solid #999999;
-  border-left: 5px solid transparent;
-  border-right: 5px solid transparent;
-  top: 100%;
-  left: 50%;
-  margin-left: -5px;
-  margin-top: -1px;
-}
-form { position: relative; margin: 50px; width: 1200px; }

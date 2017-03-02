@@ -110,9 +110,10 @@ function selectDataset(server,dataset) {
   loadDataset(url)
     .then(function(details) {
       populateFields(details.fields);
-      document.getElementById("selected_dataset").innerHTML=dataset;
+      document.getElementById("selected_dataset").firstChild.innerHTML=dataset;
       document.getElementById("scripteditor").value=details.fields[0];
-      document.getElementById("time_range").innerHTML=details.timesteps[0]+" to "+details.timesteps[1];
+      //<ctc> fixme: set new time range labels
+      document.getElementById("time_range").firstChild.innerHTML=details.timesteps[0]+" to "+details.timesteps[1];
       updateAll();
     }).catch(function(error) {
       console.log("There was a problem selecting the dataset: "+error);
@@ -122,7 +123,7 @@ function selectDataset(server,dataset) {
 //select server and populate datasets menu
 function selectServer(server) 
 {
-  document.getElementById("selected_server").innerHTML=server;
+  document.getElementById("selected_server").firstChild.innerHTML=server;
   url=server+'/mod_visus?action=list&format=json';
   loadJSON(url)
     .then(getDatasetNames)
@@ -259,7 +260,7 @@ function readDetails(header) {
 //select palette
 function selectPalette(palette) {
   console.log("selectPalette("+palette+")");
-  document.getElementById("selected_palette").innerHTML=palette;
+  document.getElementById("selected_palette").firstChild.innerHTML=palette;
   updateAll();
 }
 
@@ -273,6 +274,7 @@ function selectField(field) {
 //update range
 function updateRange() {
   console.log("updateRange()");
+/*
   var script=document.getElementById("scripteditor").value;
   var palette=document.getElementById("selected_palette").innerHTML;
   var server=document.getElementById("selected_server").innerHTML;
@@ -287,12 +289,14 @@ function updateRange() {
   //   index:0,
   //   replace:true
   // });
+*/
   updateAll();
 }
 
 //update time
 function updateTime() {
   console.log("updateTime()");
+/*
   var script=document.getElementById("scripteditor").value;
   var palette=document.getElementById("selected_palette").innerHTML;
   var server=document.getElementById("selected_server").innerHTML;
@@ -308,6 +312,7 @@ function updateTime() {
   //   index:0,
   //   replace:true
   // });
+*/
   updateAll();
 }
 
@@ -345,13 +350,13 @@ function replaceViewer() {
 
 function updateAll() {
   var script=document.getElementById("scripteditor").value;
-  var palette=document.getElementById("selected_palette").innerHTML;
-  var server=document.getElementById("selected_server").innerHTML;
-  var dataset=document.getElementById("selected_dataset").innerHTML+"_midx";
+  var palette=document.getElementById("selected_palette").firstChild.innerHTML;
+  var server=document.getElementById("selected_server").firstChild.innerHTML;
+  var dataset=document.getElementById("selected_dataset").firstChild.innerHTML;//+"_midx";  //<ctc> hack to use midx since server doesn't send necessary details
   var minRng=parseFloat(document.getElementById("rangeMin").value);
   var maxRng=parseFloat(document.getElementById("rangeMax").value);
   var time=parseInt(document.getElementById("time").value);
-  document.getElementById("selected_field").innerHTML=script;
+  document.getElementById("selected_field").firstChild.innerHTML=script;
   if (visus.dataset_details !== undefined) {
     var details=visus.dataset_details;
     replaceViewer();
@@ -379,7 +384,7 @@ function toggleScriptEditor() {
       panel.style.maxHeight = null;
     }
     selectedfield.style.display="block";
-    selectedfield.innerHTML=script.value;
+    selectedfield.firstChild.innerHTML=script.value;
   }
   else {
     button.innerHTML="-";
@@ -396,7 +401,7 @@ function clamp(val,min,max) {
   return Math.min(Math.max(min,val),max);
 }
 
-
+/*
 function modifyOffset() {
 	var el, newPoint, newPlace, offset, siblings, k;
 	width    = this.offsetWidth;
@@ -438,3 +443,4 @@ function modifyInputs() {
 }
 
 modifyInputs();
+*/

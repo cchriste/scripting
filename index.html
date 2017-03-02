@@ -114,7 +114,7 @@
       <tr>
         <td>
           <div class="wrapper">
-            <table width="100%">
+            <table style="width:100%; border-spacing:0px;">
               <tr>
                 <td>
                   <div class="dropdown">
@@ -123,23 +123,24 @@
                       <input type="text" placeholder="Search.." id="fieldFilterInput" class="filterInput" onkeyup="filterFunction(this)">
                     </div>
                   </div>
+                  <div id="selected_field" class="selected-field-item"><p>None</p></div>
+                  <div style="padding: 6px 0px;">
+                    <button class="showscriptbtn" id="toggleScriptEditorButton" onclick="toggleScriptEditor()">+</button>
+                  </div>
                 </td>
-                <td style="width:100%;text-align:right;"><div id="selected_field" class="selected-field-item">None</div></td>
-                <td><button class="evalbtn" id="toggleScriptEditorButton" onclick="toggleScriptEditor()">+</button></td>
               </tr>
               <tr>
-                <td colspan="100%">
+                <td>
                   <div id="scripteditorpanel" class="accordion-panel">
-                    <div class="dropdown" style="height:400px; width:96%;">
+                    <div class="dropdown" style="height:300px; width:336px;">
                       <textarea class="editor" id="scripteditor">output=input.data;</textarea>
                     </div>
                   </div>
                 </td>
               </tr>
-<!-- <ctc> these are causing the field height to be too large -->
               <tr>
-                <td colspan="100%">
-                  <div id="scripteditorpanel" class="accordion-panel">
+                <td>
+                  <div id="scripteditorevalbtn" class="accordion-panel">
                     <button class="evalbtn" onclick="updateAll()">Eval</button>
                   </div>
                 </td>
