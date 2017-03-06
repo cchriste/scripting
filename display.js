@@ -1,5 +1,5 @@
 
-var add_dataset=function(ds_server,ds_name,ds_width,ds_height,ds_levels,tile_size,palette,field) {
+function add_dataset(ds_server,ds_name,ds_width,ds_height,ds_levels,tile_size,palette,field) {
   var half_max_levels=parseInt(ds_levels/2,10);
   if (palette !== undefined) {
     palette="&palette="+palette;
@@ -33,25 +33,25 @@ var add_dataset=function(ds_server,ds_name,ds_width,ds_height,ds_levels,tile_siz
   };
 }
 
-var multi_data = function(widths, heights, levels, datasets, servers){
-  var tile_size=visus.tile_size;
-      OpenSeadragon({
-        id: "viewer",
-        prefixUrl: "openseadragon/images/",
-        showNavigator: true,
-        showReferenceStrip: true,
-        navigatorPosition:   "TOP_RIGHT",
-        sequenceMode: true,
-        preserveViewport: false,
-        defaultZoomLevel: 0, //fit best
-        //minZoomLevel: 0,
-        //maxZoomLevel: 50,
-        minZoomImageRatio: 0.25,
-        maxZoomImageRatio: 4.0,
-        tileSources:   [add_dataset(servers[2],datasets[2],widths[2],heights[2],levels[2],tile_size)]
-//        tileSources:   [add_dataset(servers[0],datasets[0],widths[0],heights[0],levels[0],tile_size),add_dataset(servers[1],datasets[1],widths[1],heights[1],levels[1],tile_size),add_dataset(servers[2],datasets[2],widths[2],heights[2],levels[2],tile_size),add_dataset(servers[3],datasets[3],widths[3],heights[3],levels[3],tile_size),add_dataset(servers[4],datasets[4],widths[4],heights[4],levels[4],tile_size)]
-      }); 
-}
+// var multi_data = function(widths, heights, levels, datasets, servers){
+//   var tile_size=visus.tile_size;
+//       OpenSeadragon({
+//         id: "viewer",
+//         prefixUrl: "openseadragon/images/",
+//         showNavigator: true,
+//         showReferenceStrip: true,
+//         navigatorPosition:   "TOP_RIGHT",
+//         sequenceMode: true,
+//         preserveViewport: false,
+//         defaultZoomLevel: 0, //fit best
+//         //minZoomLevel: 0,
+//         //maxZoomLevel: 50,
+//         minZoomImageRatio: 0.25,
+//         maxZoomImageRatio: 4.0,
+//         tileSources:   [add_dataset(servers[2],datasets[2],widths[2],heights[2],levels[2],tile_size)]
+// //        tileSources:   [add_dataset(servers[0],datasets[0],widths[0],heights[0],levels[0],tile_size),add_dataset(servers[1],datasets[1],widths[1],heights[1],levels[1],tile_size),add_dataset(servers[2],datasets[2],widths[2],heights[2],levels[2],tile_size),add_dataset(servers[3],datasets[3],widths[3],heights[3],levels[3],tile_size),add_dataset(servers[4],datasets[4],widths[4],heights[4],levels[4],tile_size)]
+//       }); 
+// }
 
 function openDataset(server, dataset, width, height, levels, palette, field, minRng, maxRng, time){
   var tile_size=visus.tile_size;
@@ -71,7 +71,7 @@ function openDataset(server, dataset, width, height, levels, palette, field, min
     sequenceMode: false,
     preserveViewport: true,  //probably ignored when sequenceMode=false
     minZoomImageRatio: 0.25,
-    maxZoomImageRatio: 4.0,
+    maxZoomImageRatio: 10.0,
     tileSources:   [add_dataset(url,dataset,
                                 width,height,levels,tile_size,
                                 palette,

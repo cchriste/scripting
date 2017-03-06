@@ -5,8 +5,10 @@
     <link href="main.css" rel="stylesheet" type="text/css">
     <link rel="shortcut icon" type="image/png" href="/images/visus_logo_link_small.png">
 
-<!--    <script src="openseadragon/openseadragon.min.js"></script>-->
-    <script src="openseadragon/openseadragon.js"></script>
+    <script src="./menus.js"></script>
+    <script src="openseadragon/openseadragon.min.js"></script>
+<!--    <script src="openseadragon/openseadragon.js"></script>-->
+<!--
     <script type="text/javascript">
 
       var atlantis = "http://atlantis.sci.utah.edu/mod_visus?";
@@ -22,8 +24,8 @@
 	    var datasets_height = [2880,2880,43199,319,2880];
 	    var datasets_levels = [25, 25, 33, 19, 25];
     </script>
+-->
 
-    <script src="./menus.js"></script>
 
 </head>
 
@@ -104,6 +106,7 @@
                 <span onclick="selectPalette('LinearYellow')">LinearYellow</span>
                 <span onclick="selectPalette('LinearGray5')">LinearGray5</span>
                 <span onclick="selectPalette('LinearGray4')">LinearGray4</span>
+                <span onclick="selectPalette('None')">None</span>
               </div>
             </div>
             <!--<ctc> sending /p to server! -->
@@ -124,9 +127,11 @@
                     </div>
                   </div>
                   <div id="selected_field" class="selected-field-item"><p>None</p></div>
+<!--
                   <div style="padding: 6px 0px;">
                     <button class="showscriptbtn" id="toggleScriptEditorButton" onclick="toggleScriptEditor()">+</button>
                   </div>
+-->
                 </td>
               </tr>
               <tr>
@@ -157,9 +162,9 @@
             </div>
 <!--              <label id="testinput">field range: 0.002 to 1.0002</label>-->
             <div class="vcenter">
-              <input type="text" placeholder="<unknown>" id="rangeMin" class="rangeInput" onblur="updateRange()" onkeyup="rangeKeyup()"/>
-              &nbsp;to&nbsp;
-              <input type="text" placeholder="<unknown>" id="rangeMax" class="rangeInput" onblur="updateRange()" onkeyup="rangeKeyup()"/>
+              <input type="text" placeholder="<unknown>" id="range_min" class="rangeInput" onblur="updateRange()" />
+              <p style="color:#fff;display:inline;">&nbsp;to&nbsp;</p>
+              <input type="text" placeholder="<unknown>" id="range_max" class="rangeInput" onblur="updateRange()" />
             </div>
           </div>
         </td>
@@ -171,10 +176,12 @@
               <button class="dropbtn" style="disabled:true;">Time</button>
             </div>
             <div class="vcenter">
-              <div id="time_range" class="infotext" style="text-align: right;">0</div>
-              <input type="range" id="timeRange" value="0" min="0" max="0" ondragend="updateTime()"/>
-              <div id="time_range" class="infotext" style="text-align: left;">0</div>
-              <input type="text" placeholder="0" id="time" class="timeInput" onblur="updateTime()" onkeyup="updateTimeKeyup()"/>
+              <div id="time_range_begin" class="infotext" style="text-align: right;">0</div>
+              <div style="width:130px;display:inline-block;">
+                <input type="range" id="time_slider" value="0" min="0" max="0" onchange="updateTimeFromSlider()" />
+              </div>
+              <div id="time_range_end" class="infotext" style="text-align: left;width:50px">0</div>
+              <input type="text" placeholder="0" id="time" class="timeInput" onblur="updateTime()" />
             </div>
           </div>
         </td>
@@ -186,7 +193,8 @@
 <p>
   <script src="./display.js"></script>
   <script type="text/javascript">
-    multi_data(datasets_width, datasets_height, datasets_levels, datasets_name, datasets_server);
+    init();
+    <!--multi_data(datasets_width, datasets_height, datasets_levels, datasets_name, datasets_server);-->
   </script>
 </p>
 <div id="page-footer"><div class="container"><p class="text-center">&copy; 2016

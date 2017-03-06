@@ -5,6 +5,12 @@ visus = { name: "ViSUS Web Viewer",
           osd: null
 }
 
+function init() {
+  document.getElementById("time").onkeyup=time_keyup;
+  document.getElementById("range_min").onkeyup=range_keyup;
+  document.getElementById("range_max").onkeyup=range_keyup;
+}
+
 function serverDropdownOnClick() {
   hideDiv("fieldDropdown");
   hideDiv("datasetsDropdown");
@@ -112,8 +118,13 @@ function selectDataset(server,dataset) {
       populateFields(details.fields);
       document.getElementById("selected_dataset").firstChild.innerHTML=dataset;
       document.getElementById("scripteditor").value=details.fields[0];
-      //<ctc> fixme: set new time range labels
-      document.getElementById("time_range").firstChild.innerHTML=details.timesteps[0]+" to "+details.timesteps[1];
+      document.getElementById("time_range_begin").innerHTML=details.timesteps[0];
+      document.getElementById("time_range_end").innerHTML=details.timesteps[1];
+      document.getElementById("time").value=details.timesteps[0];
+      var timeSlider=document.getElementById("time_slider");
+      timeSlider.min=details.timesteps[0];
+      timeSlider.max=details.timesteps[1];
+      timeSlider.value=details.timesteps[0];
       updateAll();
     }).catch(function(error) {
       console.log("There was a problem selecting the dataset: "+error);
@@ -205,7 +216,7 @@ function readDetails(header) {
       details.dims[2]=parseInt(dims[5])+1;
     }
     else if (lines[i]=="(logic_to_physic)") {
-      console.log("TODO: parse logical to physical scaling");
+      ;//TODO: parse and utilize logical to physical scaling
     }
     else if (lines[i]=="(bits)") {
       details.levels=lines[++i].length-1;
@@ -279,8 +290,8 @@ function updateRange() {
   var palette=document.getElementById("selected_palette").innerHTML;
   var server=document.getElementById("selected_server").innerHTML;
   var dataset=document.getElementById("selected_dataset").innerHTML;
-  var minRng=parseFloat(document.getElementById("rangeMin").value);
-  var maxRng=parseFloat(document.getElementById("rangeMax").value);
+  var minRng=parseFloat(document.getElementById("range_min").value);
+  var maxRng=parseFloat(document.getElementById("range_max").value);
   var details=visus.dataset_details;
   var tileSource=[add_dataset(server+"/mod_visus?palette_min="+minRng+"&palette_max="+maxRng+"&",dataset,details.dims[0],details.dims[1],details.levels,visus.tile_size,palette,encodeURIComponent(script))]
   // var osd=visus.osd;
@@ -293,16 +304,28 @@ function updateRange() {
   updateAll();
 }
 
+function updateTimeFromSlider() {
+  console.log("updateTimeFromSlider()");
+  var time=document.getElementById("time_slider").value;
+  document.getElementById("time").value=time;
+  updateTime();
+}
+
 //update time
 function updateTime() {
   console.log("updateTime()");
+  var time_box=document.getElementById("time");
+  var slider=document.getElementById("time_slider");
+  var time=parseInt(time_box.value);
+  time_box.value=clamp(time,slider.min,slider.max);
+  slider.value=clamp(time,slider.min,slider.max);
 /*
   var script=document.getElementById("scripteditor").value;
   var palette=document.getElementById("selected_palette").innerHTML;
   var server=document.getElementById("selected_server").innerHTML;
   var dataset=document.getElementById("selected_dataset").innerHTML;
-  var minRng=parseFloat(document.getElementById("rangeMin").value);
-  var maxRng=parseFloat(document.getElementById("rangeMax").value);
+  var minRng=parseFloat(document.getElementById("range_min").value);
+  var maxRng=parseFloat(document.getElementById("range_max").value);
   var time=parseInt(document.getElementById("time").value);
   var details=visus.dataset_details;
   var tileSource=[add_dataset(server+"/mod_visus?palette_min="+minRng+"&palette_max="+maxRng+"&"+"time="+time+"&",dataset,details.dims[0],details.dims[1],details.levels,visus.tile_size,palette,encodeURIComponent(script))]
@@ -317,19 +340,16 @@ function updateTime() {
 }
 
 //update time
-function updateTimeKeyup(event) {
+function time_keyup(event) {
   if (event.which==13)
   {
     console.log("updateTime-pressedEnter()");
-    var time=parseInt(document.getElementById("time").value);
-    var slider=document.getElementById("timeRange");
-    slider.value=clamp(time,slider.min,slider.max);
     updateTime();
   }
 }
 
 //update time
-function rangeKeyup(event) {
+function range_keyup(event) {
   if (event.which==13)
   {
     console.log("updateRange-pressedEnter()");
@@ -353,8 +373,8 @@ function updateAll() {
   var palette=document.getElementById("selected_palette").firstChild.innerHTML;
   var server=document.getElementById("selected_server").firstChild.innerHTML;
   var dataset=document.getElementById("selected_dataset").firstChild.innerHTML;//+"_midx";  //<ctc> hack to use midx since server doesn't send necessary details
-  var minRng=parseFloat(document.getElementById("rangeMin").value);
-  var maxRng=parseFloat(document.getElementById("rangeMax").value);
+  var minRng=parseFloat(document.getElementById("range_min").value);
+  var maxRng=parseFloat(document.getElementById("range_max").value);
   var time=parseInt(document.getElementById("time").value);
   document.getElementById("selected_field").firstChild.innerHTML=script;
   if (visus.dataset_details !== undefined) {
