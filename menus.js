@@ -235,12 +235,12 @@ function readDetails(header) {
         var field=fields[j].trim().split(' ');
         field_struct.name=field[0];
         for (var k=1;k<field.length;k++) {
-          if (field[k].substring(0,2)=="min") {
-            var minval=parseFloat(field[k].substring(4,field[k].len-1));
+          if (field[k].substring(0,3)=="min") {
+            var minval=parseFloat(field[k].substring(4,field[k].length-1));
             field_struct.min=minval;
           }
-          if (field[k].substring(0,2)=="max") {
-            var maxval=parseFloat(field[k].substring(4,field[k].len-1));
+          if (field[k].substring(0,3)=="max") {
+            var maxval=parseFloat(field[k].substring(4,field[k].length-1));
             field_struct.max=maxval;
           }
         }
