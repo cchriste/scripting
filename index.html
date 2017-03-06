@@ -160,11 +160,11 @@
             <div class="dropdown">
               <button class="dropbtn" style="disabled:true;">Range</button>
             </div>
-<!--              <label id="testinput">field range: 0.002 to 1.0002</label>-->
             <div class="vcenter">
-              <input type="text" placeholder="<unknown>" id="range_min" class="rangeInput" onblur="updateRange()" />
+              <input type="text" placeholder="" id="range_min" class="rangeInput" onblur="updateRange()" />
               <p style="color:#fff;display:inline;">&nbsp;to&nbsp;</p>
-              <input type="text" placeholder="<unknown>" id="range_max" class="rangeInput" onblur="updateRange()" />
+              <input type="text" placeholder="" id="range_max" class="rangeInput" onblur="updateRange()" />
+              <input type="checkbox" id="auto_range" changed="autoRangeChanged()" checked="true"><p style="color:#fff;display:inline;">auto</p>
             </div>
           </div>
         </td>

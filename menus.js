@@ -103,21 +103,21 @@ function populateFields(fields) {
   div.appendChild(input);
   for (var i=0;i<fields.length;i++) {
     var field=document.createElement("span");
-    field.setAttribute("onclick","selectField('"+fields[i]+"')");
-    field.innerHTML=fields[i];
+    field.setAttribute("onclick","selectField('"+fields[i].name+"')");
+    field.innerHTML=fields[i].name;
     div.appendChild(field);
   }
 }
 
 //select dataset
 function selectDataset(server,dataset) {
-  console.log("selectDataset("+server+","+dataset+")");
+  //console.log("selectDataset("+server+","+dataset+")");
   url=server+'/mod_visus?action=readdataset&dataset='+dataset;
   loadDataset(url)
     .then(function(details) {
       populateFields(details.fields);
       document.getElementById("selected_dataset").firstChild.innerHTML=dataset;
-      document.getElementById("scripteditor").value=details.fields[0];
+      document.getElementById("scripteditor").value=details.fields[0].name;
       document.getElementById("time_range_begin").innerHTML=details.timesteps[0];
       document.getElementById("time_range_end").innerHTML=details.timesteps[1];
       document.getElementById("time").value=details.timesteps[0];
@@ -168,7 +168,7 @@ function getDatasetNames(obj) {
     else
       console.log("unknown item encountered: "+item.name);
   }
-  console.log("the datasets: "+ret);
+  //console.log("the datasets: "+ret);
   return ret;
 }
 
@@ -204,7 +204,7 @@ function loadDataset(url) {
 function readDetails(header) {
   details={};
 
-  console.log("dataset header: "+header);
+  //console.log("dataset header: "+header);
 
   var lines = header.split('\n');
   for(var i = 0;i < lines.length;i++){
@@ -229,8 +229,20 @@ function readDetails(header) {
       } while (lines[i+1] != "(bits)");
       var fields=buf.split('+');
       for (var j=0;j<fields.length;j++) {
+        var field_struct={};
         var field=fields[j].trim().split(' ');
-        details.fields.push(field[0]); // fieldname
+        field_struct.name=field[0];
+        for (var k=1;k<field.length;k++) {
+          if (field[k].substring(0,2)=="min") {
+            var minval=parseFloat(field[k].substring(4,field[k].len-1));
+            field_struct.min=minval;
+          }
+          if (field[k].substring(0,2)=="max") {
+            var maxval=parseFloat(field[k].substring(4,field[k].len-1));
+            field_struct.max=maxval;
+          }
+        }
+        details.fields.push(field_struct); // fieldname
       }
     }
     else if (lines[i]=="(time)") {
@@ -270,21 +282,37 @@ function readDetails(header) {
 
 //select palette
 function selectPalette(palette) {
-  console.log("selectPalette("+palette+")");
+  //console.log("selectPalette("+palette+")");
   document.getElementById("selected_palette").firstChild.innerHTML=palette;
   updateAll();
 }
 
 //select field
 function selectField(field) {
-  console.log("selectField("+field+")");
+  //console.log("selectField("+field+")");
   document.getElementById("scripteditor").value=field;
+
+  for (var i=0;i<dataset_details.fields.length;i++) {
+    if (dataset_details.fields[i].name==field) {
+      var auto=("min" in dataset_details.fields[i] && "max" in dataset_details.fields[i]);
+      if ("min" in dataset_details.fields[i])
+        document.getElementById("range_min").value=dataset_details.fields[i].min;
+      if ("max" in dataset_details.fields[i])
+        document.getElementById("range_max").value=dataset_details.fields[i].max;
+      break;
+      if (auto)
+        document.getElementById("auto_range").checked=true;
+      else
+        document.getElementById("auto_range").checked=false;
+    }
+  }
+
   updateAll();
 }
 
 //update range
 function updateRange() {
-  console.log("updateRange()");
+  //console.log("updateRange()");
 /*
   var script=document.getElementById("scripteditor").value;
   var palette=document.getElementById("selected_palette").innerHTML;
@@ -305,7 +333,7 @@ function updateRange() {
 }
 
 function updateTimeFromSlider() {
-  console.log("updateTimeFromSlider()");
+  //console.log("updateTimeFromSlider()");
   var time=document.getElementById("time_slider").value;
   document.getElementById("time").value=time;
   updateTime();
@@ -313,7 +341,7 @@ function updateTimeFromSlider() {
 
 //update time
 function updateTime() {
-  console.log("updateTime()");
+  //console.log("updateTime()");
   var time_box=document.getElementById("time");
   var slider=document.getElementById("time_slider");
   var time=parseInt(time_box.value);
@@ -343,7 +371,7 @@ function updateTime() {
 function time_keyup(event) {
   if (event.which==13)
   {
-    console.log("updateTime-pressedEnter()");
+    //console.log("updateTime-pressedEnter()");
     updateTime();
   }
 }
@@ -352,7 +380,7 @@ function time_keyup(event) {
 function range_keyup(event) {
   if (event.which==13)
   {
-    console.log("updateRange-pressedEnter()");
+    //console.log("updateRange-pressedEnter()");
     updateRange();
   }
 }
@@ -372,7 +400,7 @@ function updateAll() {
   var script=document.getElementById("scripteditor").value;
   var palette=document.getElementById("selected_palette").firstChild.innerHTML;
   var server=document.getElementById("selected_server").firstChild.innerHTML;
-  var dataset=document.getElementById("selected_dataset").firstChild.innerHTML;//+"_midx";  //<ctc> hack to use midx since server doesn't send necessary details
+  var dataset=document.getElementById("selected_dataset").firstChild.innerHTML;//+"_midx";  //<ctc> hack to use midx since server doesn't yet send necessary details
   var minRng=parseFloat(document.getElementById("range_min").value);
   var maxRng=parseFloat(document.getElementById("range_max").value);
   var time=parseInt(document.getElementById("time").value);
