@@ -117,7 +117,8 @@ function selectDataset(server,dataset) {
     .then(function(details) {
       populateFields(details.fields);
       document.getElementById("selected_dataset").firstChild.innerHTML=dataset;
-      document.getElementById("scripteditor").value=details.fields[0].name;
+      //document.getElementById("scripteditor").value=details.fields[0].name;
+      selectField(details.fields[0].name);
       document.getElementById("time_range_begin").innerHTML=details.timesteps[0];
       document.getElementById("time_range_end").innerHTML=details.timesteps[1];
       document.getElementById("time").value=details.timesteps[0];
@@ -203,6 +204,7 @@ function loadDataset(url) {
 
 function readDetails(header) {
   details={};
+  details.timesteps=[0,0];
 
   //console.log("dataset header: "+header);
 
@@ -251,7 +253,6 @@ function readDetails(header) {
         console.log("TODO: I don't know what * means for timesteps");
       }
       else {
-        details.timesteps=[0,0];
         var start=parseInt(timeline[0]);
         if (!isNaN(start)) {  //old format
           var end=parseInt(timeline[1]);
@@ -292,18 +293,23 @@ function selectField(field) {
   //console.log("selectField("+field+")");
   document.getElementById("scripteditor").value=field;
 
-  for (var i=0;i<dataset_details.fields.length;i++) {
-    if (dataset_details.fields[i].name==field) {
-      var auto=("min" in dataset_details.fields[i] && "max" in dataset_details.fields[i]);
-      if ("min" in dataset_details.fields[i])
-        document.getElementById("range_min").value=dataset_details.fields[i].min;
-      if ("max" in dataset_details.fields[i])
-        document.getElementById("range_max").value=dataset_details.fields[i].max;
-      break;
+  var fields=visus.dataset_details.fields;
+  for (var i=0;i<fields.length;i++) {
+    if (fields[i].name==field) {
+      var auto=("min" in fields[i] && "max" in fields[i]);
+      if ("min" in fields[i])
+        document.getElementById("range_min").value=fields[i].min;
+      else
+        document.getElementById("range_min").value=0;
+      if ("max" in fields[i])
+        document.getElementById("range_max").value=fields[i].max;
+      else
+        document.getElementById("range_max").value=1e-4;
       if (auto)
         document.getElementById("auto_range").checked=true;
       else
         document.getElementById("auto_range").checked=false;
+      break;
     }
   }
 
@@ -447,4 +453,9 @@ function toggleScriptEditor() {
 
 function clamp(val,min,max) {
   return Math.min(Math.max(min,val),max);
+}
+
+
+function autoRangeChanged() {
+  console.log("autoRangeChanged");
 }
