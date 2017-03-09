@@ -33,48 +33,25 @@ function add_dataset(ds_server,ds_name,ds_width,ds_height,ds_levels,tile_size,pa
   };
 }
 
-// var multi_data = function(widths, heights, levels, datasets, servers){
-//   var tile_size=visus.tile_size;
-//       OpenSeadragon({
-//         id: "viewer",
-//         prefixUrl: "openseadragon/images/",
-//         showNavigator: true,
-//         showReferenceStrip: true,
-//         navigatorPosition:   "TOP_RIGHT",
-//         sequenceMode: true,
-//         preserveViewport: false,
-//         defaultZoomLevel: 0, //fit best
-//         //minZoomLevel: 0,
-//         //maxZoomLevel: 50,
-//         minZoomImageRatio: 0.25,
-//         maxZoomImageRatio: 4.0,
-//         tileSources:   [add_dataset(servers[2],datasets[2],widths[2],heights[2],levels[2],tile_size)]
-// //        tileSources:   [add_dataset(servers[0],datasets[0],widths[0],heights[0],levels[0],tile_size),add_dataset(servers[1],datasets[1],widths[1],heights[1],levels[1],tile_size),add_dataset(servers[2],datasets[2],widths[2],heights[2],levels[2],tile_size),add_dataset(servers[3],datasets[3],widths[3],heights[3],levels[3],tile_size),add_dataset(servers[4],datasets[4],widths[4],heights[4],levels[4],tile_size)]
-//       }); 
-// }
-
-function openDataset(server, dataset, width, height, levels, palette, field, minRng, maxRng, time){
+function openDataset(tileSource){
   var tile_size=visus.tile_size;
-  var url=server+"/mod_visus?"+
-    (minRng?"palette_min="+minRng+"&":"")+
-    (maxRng?"palette_max="+maxRng+"&":"")+
-    (time?"time="+time+"&":"");
   visus.osd=OpenSeadragon({
     id: "viewer",
     prefixUrl: "openseadragon/images/",
     showNavigator: true,
     showReferenceStrip: false,
     navigatorPosition:   "TOP_RIGHT",
-    immediateRender: true,
+    immediateRender: false,  //true skips coarse resolution levels
     defaultZoomLevel: 0, //fit best
     maxImageCacheCount: 500, //default is 200 "per drawer"
     sequenceMode: false,
-    preserveViewport: true,  //probably ignored when sequenceMode=false
+    preserveViewport: true,
     minZoomImageRatio: 0.25,
-    maxZoomImageRatio: 10.0,
-    tileSources:   [add_dataset(url,dataset,
-                                width,height,levels,tile_size,
-                                palette,
-                                encodeURIComponent(field))]
+    maxZoomImageRatio: Infinity,
+    visibilityRatio: 0.2,
+    imageLoaderLimit: 20, //maximum number of simultaneous image requests
+    showRotationControl: true,
+    placeholderFillStyle: "#FF8800",
+    tileSources:   [tileSource]
   });
 }

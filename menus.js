@@ -126,7 +126,7 @@ function selectDataset(server,dataset) {
       timeSlider.min=details.timesteps[0];
       timeSlider.max=details.timesteps[1];
       timeSlider.value=details.timesteps[0];
-      updateAll();
+      updateViewer(true);
     }).catch(function(error) {
       console.log("There was a problem selecting the dataset: "+error);
     });
@@ -135,6 +135,7 @@ function selectDataset(server,dataset) {
 //select server and populate datasets menu
 function selectServer(server) 
 {
+  //TODO: need to clear the other input fields (dataset, field, etc)
   document.getElementById("selected_server").firstChild.innerHTML=server;
   url=server+'/mod_visus?action=list&format=json';
   loadJSON(url)
@@ -285,7 +286,7 @@ function readDetails(header) {
 function selectPalette(palette) {
   //console.log("selectPalette("+palette+")");
   document.getElementById("selected_palette").firstChild.innerHTML=palette;
-  updateAll();
+  updateViewer();
 }
 
 //select field
@@ -313,29 +314,13 @@ function selectField(field) {
     }
   }
 
-  updateAll();
+  updateViewer();
 }
 
 //update range
 function updateRange() {
   //console.log("updateRange()");
-/*
-  var script=document.getElementById("scripteditor").value;
-  var palette=document.getElementById("selected_palette").innerHTML;
-  var server=document.getElementById("selected_server").innerHTML;
-  var dataset=document.getElementById("selected_dataset").innerHTML;
-  var minRng=parseFloat(document.getElementById("range_min").value);
-  var maxRng=parseFloat(document.getElementById("range_max").value);
-  var details=visus.dataset_details;
-  var tileSource=[add_dataset(server+"/mod_visus?palette_min="+minRng+"&palette_max="+maxRng+"&",dataset,details.dims[0],details.dims[1],details.levels,visus.tile_size,palette,encodeURIComponent(script))]
-  // var osd=visus.osd;
-  // osd.addTiledImage({
-  //   tileSource:add_dataset(tileSource),
-  //   index:0,
-  //   replace:true
-  // });
-*/
-  updateAll();
+  updateViewer();
 }
 
 function updateTimeFromSlider() {
@@ -353,24 +338,40 @@ function updateTime() {
   var time=parseInt(time_box.value);
   time_box.value=clamp(time,slider.min,slider.max);
   slider.value=clamp(time,slider.min,slider.max);
-/*
+
+  updateViewer();
+}
+
+//re-reads all fields and updates (reloads) tileset
+function updateViewer(reset_view=false) {
   var script=document.getElementById("scripteditor").value;
-  var palette=document.getElementById("selected_palette").innerHTML;
-  var server=document.getElementById("selected_server").innerHTML;
-  var dataset=document.getElementById("selected_dataset").innerHTML;
+  var palette=document.getElementById("selected_palette").firstChild.innerHTML;
+  var server=document.getElementById("selected_server").firstChild.innerHTML;
+  var dataset=document.getElementById("selected_dataset").firstChild.innerHTML;//+"_midx";  //<ctc> hack to use midx since server doesn't yet send necessary details
   var minRng=parseFloat(document.getElementById("range_min").value);
   var maxRng=parseFloat(document.getElementById("range_max").value);
   var time=parseInt(document.getElementById("time").value);
-  var details=visus.dataset_details;
-  var tileSource=[add_dataset(server+"/mod_visus?palette_min="+minRng+"&palette_max="+maxRng+"&"+"time="+time+"&",dataset,details.dims[0],details.dims[1],details.levels,visus.tile_size,palette,encodeURIComponent(script))]
-  // var osd=visus.osd;
-  // osd.addTiledImage({
-  //   tileSource:add_dataset(tileSource),
-  //   index:0,
-  //   replace:true
-  // });
-*/
-  updateAll();
+  document.getElementById("selected_field").firstChild.innerHTML=script;
+  if (visus.dataset_details !== undefined) {
+    var details=visus.dataset_details;
+    var url=server+"/mod_visus?"+
+      (minRng?"palette_min="+minRng+"&":"")+
+      (maxRng?"palette_max="+maxRng+"&":"")+
+      (time?"time="+time+"&":"");
+    var tileSource=add_dataset(url,dataset,
+                               details.dims[0],details.dims[1],details.levels,visus.tile_size,
+                               palette,
+                               encodeURIComponent(script));
+    if (visus.osd) {
+      visus.osd.open(tileSource);
+      if (reset_view) {
+        visus.osd.viewport.goHome( true );
+        visus.osd.viewport.update();
+      }
+    }
+    else 
+      openDataset(tileSource);
+  }
 }
 
 //update time
@@ -395,35 +396,15 @@ function replaceViewer() {
   var viewer=document.getElementById("viewer");
   var sidebar=document.getElementById("sidebar");
   var parent=viewer.parentNode;
+  if (visus.osd !== null) {
+    visus.osd.destroy();
+    visus.osd=null;
+  }
   parent.removeChild(viewer);
   var new_viewer=document.createElement("div");
   new_viewer.id="viewer";
   new_viewer.className="openseadragon";
   parent.insertBefore(new_viewer,sidebar);
-}
-
-function updateAll() {
-  var script=document.getElementById("scripteditor").value;
-  var palette=document.getElementById("selected_palette").firstChild.innerHTML;
-  var server=document.getElementById("selected_server").firstChild.innerHTML;
-  var dataset=document.getElementById("selected_dataset").firstChild.innerHTML;//+"_midx";  //<ctc> hack to use midx since server doesn't yet send necessary details
-  var minRng=parseFloat(document.getElementById("range_min").value);
-  var maxRng=parseFloat(document.getElementById("range_max").value);
-  var time=parseInt(document.getElementById("time").value);
-  document.getElementById("selected_field").firstChild.innerHTML=script;
-  if (visus.dataset_details !== undefined) {
-    var details=visus.dataset_details;
-    replaceViewer();
-    openDataset(server,
-                dataset,
-                details.dims[0],details.dims[1],
-                details.levels,
-                palette==="None"?undefined:palette,
-                script,
-                minRng,maxRng,
-                time
-               );
-  }
 }
 
 function toggleScriptEditor() {
