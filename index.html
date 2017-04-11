@@ -191,6 +191,12 @@
               <div id="time_range_end" class="infotext" style="text-align: left;width:50px">0</div>
               <input type="text" placeholder="0" id="time" class="timeInput" onblur="updateTime()" />
             </div>
+            <div style="padding: 6px 0px;">
+              <button class="showscriptbtn" id="timeIncButton" onclick="incTime()">+</button>
+              <button class="showscriptbtn" id="timeDecButton" onclick="decTime()">-</button>
+              <div class="infotext" style="text-align:right">stepsize</div>
+              <input type="text" placeholder="0" id="stepsize" class="timeInput" onblur="updateStepsize()" />
+            </div>
           </div>
         </td>
       </tr>

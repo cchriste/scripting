@@ -41,9 +41,9 @@ function openDataset(tileSource){
     showNavigator: true,
     showReferenceStrip: false,
     navigatorPosition:   "TOP_RIGHT",
-    immediateRender: false,  //true skips coarse resolution levels
+    immediateRender: true,  //true skips coarse resolution levels
     defaultZoomLevel: 0, //fit best
-    maxImageCacheCount: 500, //default is 200 "per drawer"
+    maxImageCacheCount: 1000, //default is 200 "per drawer"
     sequenceMode: false,
     preserveViewport: true,
     minZoomImageRatio: 0.25,

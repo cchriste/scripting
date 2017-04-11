@@ -3,7 +3,8 @@ visus = { name: "ViSUS Web Viewer",
           dataset_details: undefined,
           tile_size: 512,
           osd: null,
-          scripting: false
+          scripting: false,
+          time_step: 1
 }
 
 function init() {
@@ -332,6 +333,29 @@ function updateTimeFromSlider() {
   updateTime();
 }
 
+function updateStepsize() {
+  var stepsize=document.getElementById("stepsize").value;
+  visus.time_step=parseInt(stepsize);
+}
+
+function incTime() {
+  //console.log("updateTimeFromSlider()");
+  var time_box=document.getElementById("time");
+  var time=parseInt(time_box.value);
+  time+=visus.time_step;
+  document.getElementById("time").value=time;
+  updateTime();
+}
+
+function decTime() {
+  //console.log("updateTimeFromSlider()");
+  var time_box=document.getElementById("time");
+  var time=parseInt(time_box.value);
+  time-=visus.time_step;
+  document.getElementById("time").value=time;
+  updateTime();
+}
+
 //update time
 function updateTime() {
   //console.log("updateTime()");
@@ -350,7 +374,7 @@ function updateViewer(reset_view=false) {
   var palette=document.getElementById("selected_palette").firstChild.innerHTML;
   var interp=document.getElementById("palette_interp_flat").checked;
   var server=document.getElementById("selected_server").firstChild.innerHTML;
-  var dataset=document.getElementById("selected_dataset").firstChild.innerHTML;//+"_midx";  //<ctc> hack to use midx since server doesn't yet send necessary details
+  var dataset=document.getElementById("selected_dataset").firstChild.innerHTML;//+"_midx";  //in order to use midx since server doesn't yet send necessary details
   var minRng=parseFloat(document.getElementById("range_min").value);
   var maxRng=parseFloat(document.getElementById("range_max").value);
   var time=parseInt(document.getElementById("time").value);
