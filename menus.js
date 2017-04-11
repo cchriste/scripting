@@ -2,7 +2,8 @@
 visus = { name: "ViSUS Web Viewer",
           dataset_details: undefined,
           tile_size: 512,
-          osd: null
+          osd: null,
+          scripting: false
 }
 
 function init() {
@@ -137,7 +138,8 @@ function selectServer(server)
 {
   //TODO: need to clear the other input fields (dataset, field, etc)
   document.getElementById("selected_server").firstChild.innerHTML=server;
-  url=server+'/mod_visus?action=list&format=json';
+  var property=visus.scripting?"&property=midx":"&property=idx";
+  url=server+'/mod_visus?action=list&format=json'+property;
   loadJSON(url)
     .then(getDatasetNames)
     .then(function(datasets) {
@@ -163,7 +165,7 @@ function getDatasetNames(obj) {
   var ret=[];
   while (arr.length > 0) {
     item = arr.shift();
-    if (item.name == "group")
+    if (item.name == "group" && 'childs' in item)
       arr = item.childs.concat(arr);
     else if (item.name == "dataset")
       ret.push(item.attributes.name);
@@ -346,6 +348,7 @@ function updateTime() {
 function updateViewer(reset_view=false) {
   var script=document.getElementById("scripteditor").value;
   var palette=document.getElementById("selected_palette").firstChild.innerHTML;
+  var interp=document.getElementById("palette_interp_flat").checked;
   var server=document.getElementById("selected_server").firstChild.innerHTML;
   var dataset=document.getElementById("selected_dataset").firstChild.innerHTML;//+"_midx";  //<ctc> hack to use midx since server doesn't yet send necessary details
   var minRng=parseFloat(document.getElementById("range_min").value);
@@ -357,6 +360,7 @@ function updateViewer(reset_view=false) {
     var url=server+"/mod_visus?"+
       (minRng?"palette_min="+minRng+"&":"")+
       (maxRng?"palette_max="+maxRng+"&":"")+
+      (interp?"palette_interp=Flat&":"")+
       (time?"time="+time+"&":"");
     var tileSource=add_dataset(url,dataset,
                                details.dims[0],details.dims[1],details.levels,visus.tile_size,
@@ -439,4 +443,9 @@ function clamp(val,min,max) {
 
 function autoRangeChanged() {
   console.log("autoRangeChanged");
+}
+
+function interpChanged() {
+  console.log("interpChanged");
+  updateViewer();
 }

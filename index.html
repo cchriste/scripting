@@ -56,7 +56,7 @@
                 <span onclick="selectServer('http://localhost')">localhost</span>
                 <span onclick="selectServer('http://localhost:8080')">localhost:8080</span>
 -->
-                <span onclick="selectServer('http://localhost:8081')">localhost:8081</span>
+                <span onclick="selectServer('http://localhost:10000')">localhost:10000</span>
               </div>
             </div>
             <div id="selected_server" class="selected-item"><p>None</p></div>
@@ -114,6 +114,9 @@
             </div>
             <!--<ctc> sending /p to server! -->
             <div id="selected_palette" class="selected-item"><p>grayopaque</p></div>
+<!--            <input type="checkbox" id="invert_palette" changed="invertPaletteChanged()" checked="false"><p style="color:#fff;display:inline;">invert</p>-->
+            <input type="checkbox" id="palette_interp_flat" changed="interpChanged()" checked="false"><p style="color:#fff;display:inline;">stepped</p>
+<!--            <input type="checkbox" id="palette_interp_inverted" changed="interpChanged()" checked="false"><p style="color:#fff;display:inline;">reversed</p>-->
           </div>
         </td>
       </tr>
