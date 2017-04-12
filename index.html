@@ -33,7 +33,8 @@
 
 <table width="100%" style="">
   <tr>
-    <td style="width:100%;color:grey;text-align:center;font-size:36px">ViSUS Web Interface Demo</td>
+    <td style="width:100%;color:grey;text-align:center;font-size:36px">ViSUS
+Web Interface Demo (with scripting)</td>
     <td><a href="http://www.visus.net"><img src="images/visus_logo.png" width="300"/></a></td>
   </tr>
 </table>
@@ -49,11 +50,14 @@
             <div class="dropdown">
               <button onclick="serverDropdownOnClick()" class="dropbtn">Server</button>
               <div id="serverDropdown" class="dropdown-content">
+                <span onclick="selectServer('http://gunship.sci.utah.edu')">gunship.sci.utah.edu</span>
                 <span onclick="selectServer('https://feedback.llnl.gov')">feedback.llnl.gov</span>
+<!--
                 <span onclick="selectServer('http://atlanta.sci.utah.edu')">atlanta.sci.utah.edu</span>
                 <span onclick="selectServer('http://localhost')">localhost</span>
                 <span onclick="selectServer('http://localhost:8080')">localhost:8080</span>
                 <span onclick="selectServer('http://localhost:8081')">localhost:8081</span>
+-->
               </div>
             </div>
             <div id="selected_server" class="selected-item"><p>None</p></div>
@@ -127,11 +131,9 @@
                     </div>
                   </div>
                   <div id="selected_field" class="selected-field-item"><p>None</p></div>
-<!--
                   <div style="padding: 6px 0px;">
                     <button class="showscriptbtn" id="toggleScriptEditorButton" onclick="toggleScriptEditor()">+</button>
                   </div>
--->
                 </td>
               </tr>
               <tr>

@@ -372,7 +372,7 @@ function updateAll() {
   var script=document.getElementById("scripteditor").value;
   var palette=document.getElementById("selected_palette").firstChild.innerHTML;
   var server=document.getElementById("selected_server").firstChild.innerHTML;
-  var dataset=document.getElementById("selected_dataset").firstChild.innerHTML;//+"_midx";  //<ctc> hack to use midx since server doesn't send necessary details
+  var dataset=document.getElementById("selected_dataset").firstChild.innerHTML+"_midx";  //in order to use midx since server doesn't yet send necessary details
   var minRng=parseFloat(document.getElementById("range_min").value);
   var maxRng=parseFloat(document.getElementById("range_max").value);
   var time=parseInt(document.getElementById("time").value);
