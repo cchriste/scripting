@@ -2,10 +2,10 @@
 <html>
 <head>
     <title>NASA 7km GEOS-5 Nature Run ViSUS Web Interface Demo</title>
-    <link href="main.css" rel="stylesheet" type="text/css">
+    <link href="css/main.css" rel="stylesheet" type="text/css">
     <link rel="shortcut icon" type="image/png" href="/images/visus_logo_link_small.png">
 
-    <script src="./menus.js"></script>
+    <script src="code/menus.js"></script>
     <script src="openseadragon/openseadragon.min.js"></script>
 <!--    <script src="openseadragon/openseadragon.js"></script>-->
 <!--
@@ -49,16 +49,16 @@
             <div class="dropdown">
               <button onclick="serverDropdownOnClick()" class="dropbtn">Server</button>
               <div id="serverDropdown" class="dropdown-content">
-                <span onclick="selectServer('https://feedback.llnl.gov')">feedback.llnl.gov</span>
+                <span onclick="selectServer('http://localhost')">localhost</span>
                 <span onclick="selectServer('http://atlantis.sci.utah.edu')">atlantis.sci.utah.edu</span>
+                <span onclick="selectServer('https://feedback.llnl.gov')">feedback.llnl.gov</span>
+<!--
                 <span onclick="selectServer('http://gunship.sci.utah.edu')">gunship.sci.utah.edu</span>
                 <span onclick="selectServer('http://gunship.sci.utah.edu:8080')">gunship.sci.utah.edu:8080</span>
-<!--
                 <span onclick="selectServer('http://atlanta.sci.utah.edu')">atlanta.sci.utah.edu</span>
                 <span onclick="selectServer('http://localhost')">localhost</span>
                 <span onclick="selectServer('http://localhost:8080')">localhost:8080</span>
 -->
-                <span onclick="selectServer('http://localhost:10000')">localhost:10000</span>
               </div>
             </div>
             <div id="selected_server" class="selected-item"><p>None</p></div>
@@ -205,7 +205,7 @@
   <div id="cleared"></div>
 </div>
 <p>
-  <script src="./display.js"></script>
+  <script src="code/display.js"></script>
   <script type="text/javascript">
     init();
     <!--multi_data(datasets_width, datasets_height, datasets_levels, datasets_name, datasets_server);-->
